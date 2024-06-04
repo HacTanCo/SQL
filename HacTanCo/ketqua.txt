@@ -1,0 +1,5 @@
+1;a;chinhthuc;1.2
+2;b;hopdong;2.2
+3;c;chinhthuc;3.2
+1;d;hopdong;4.2;500.0
+2;e;chinhthuc;5.2;1000.0
