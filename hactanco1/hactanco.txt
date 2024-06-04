@@ -1,0 +1,8 @@
+CD0001;ip6;apple;10000;bac
+CD0002;ip7;ios;20000;xanh
+CD0003;ip8;apple;30000;bac
+CD0001;ip6;apple;10000;bac;adjdha
+DD0001;ip1;ios;1000;12/2/2022;128
+DD0002;ip1;apple;2000;11/11/2022;64
+DD0003;ip2;androi;3000;16/3/2024;32
+DD0001;ip3;applewact;4000;12/2/2024;124;asdas
