@@ -1,0 +1,45 @@
+- Ngôn ngữ điểu khiểnn dữ liệuu :
+ + Grant : cấp phát quyềnn
+ + Revoke : hủy quyềnn
+2. Các thành phần của T-Sql
+ A. Kiểu dữ liệu
+
+ B. Khai báo biến 
+    * Cú pháp : Declare @tênbiến kdliệuu
+	    vd: Declare @x int,@b float
+ C. Phép gán
+    * Cú pháp : Set @tênbiến = biểuthức
+	    vd: Set @x = 5
+		Set @b = 7
+		Set @b= @x + @a
+ D. Hiển thị chuỗi giá trị ra màn hình
+	print 'chuỗi giá trị'
+ E. Ghi chú
+ 
+ F. Các hàm thường dùng 
+ - hàm về tập hợp/gộp : - sum(),count(),max(),min(),avg()
+ - hàm về chuỗi : upper(),lower(),len(),left(),right(),rtrim(),ltrim(),substring()
+
+* Hàm về thời gian
+ - day()/month()/year() : lấy ngày/tháng/năm
+ - getdate() : lấy ngày tháng năm hiện tại 
+ - datediff(dd/mm/yy,date1,date2) : hàm lấy số ngày/tháng/năm từ ngày 1 tới ngày 2
+* Hàm về toán học
+ - square() : hàm bình phương
+ - sqrt() : hàm lấy căn
+ - round() : hàm làm tròn
+* Hàm chuyển đổi kiểu dữ liệu
+ - cast(biểuthức as kiểudữliệu)
+ - convert(kiểudữliệu, biểuthức)
+ G. Biểu thức
+ 	So sánh: <,<=,>,>=,=,<>
+	logic: 	+ not,and,or
+		+ in, not in
+		+ exists,not exists
+		+ is null
+		+ between..... and ....
+ H. Một số lệnh trong lập trình
+* Lệnh : if .. else, while
+* Khối lệnh : Begin
+              ....
+              End
