@@ -1,4 +1,0 @@
-IN,Mang toc do cao,Le Thi Mo,IN1,12/12/2002,10mbit/s
-IN,Mang Cap Quang,Dau Thi Buoi,IN2,09/11/2014,20 mbit/s
-DT,dien thoai tra sau ,Nguyen Nhu Y,DT1,29/02/2001,3G
-DT,dien thoai tra truoc ,Le Anh,DT2,29/02/2001,4G
