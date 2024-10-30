@@ -1,26 +1,32 @@
+SELECT OBJECT_NAME(object_id) AS ObjectName, definition AS Code
+FROM sys.sql_modules;
+
 --a. Viết thủ tục/hàm với tham số truyền vào là ngày A(dd/mm/yyyy), thủ tục/hàm dùng để
 --lấy danh sách các trận đấu diễn ra vào ngày ngày A, danh sách được sắp xếp theo
 --MaTD, Sân đấu.
-CREATE proc sp_TranDau_HienThi_TranDauDienRaVaoNgayA(@A datetime)
+alter proc sp_TranDau_HienThi_TranDauDienRaVaoNgayA(@A datetime)
 as
 	begin
-		select *
-		from TranDau
+		select TranDau.MaTD,TrongTai,SanDau,MaDB1,db1.TenDB,MaDB2,db2.TenDB,Ngay
+		from TranDau join DoiBong as db1 on TranDau.MaDB1=db1.MaDB
+					 join DoiBong as db2 on TranDau.MaDB2=db2.MaDB
 		where Ngay = @A
 		order by MaTD,SanDau desc
 	end
-sp_TranDau_HienThi_TranDauDienRaVaoNgayA '10-2-2023'
-
-create function fc_TranDau_HienThi_TranDauDienRaVaoNgayA(@A datetime)
+sp_TranDau_HienThi_TranDauDienRaVaoNgayA '2023-10-2'
+select * from TranDau
+select * from DoiBong
+alter function fc_TranDau_HienThi_TranDauDienRaVaoNgayA(@A datetime)
 returns table
 as
 	return(
-			select *
-			from TranDau
+			select TranDau.MaTD,TrongTai,SanDau,MaDB1,db1.TenDB as TenDB1,MaDB2,db2.TenDB as TenDB2,Ngay
+			from TranDau join DoiBong as db1 on TranDau.MaDB1=db1.MaDB
+						 join DoiBong as db2 on TranDau.MaDB2=db2.MaDB
 			where Ngay = @A
-			
 		  )
-select * from dbo.fc_TranDau_HienThi_TranDauDienRaVaoNgayA ('10-2-2023')
+select * from dbo.fc_TranDau_HienThi_TranDauDienRaVaoNgayA ('2023-10-2')
+order by MaTD,SanDau desc
 --b. Viết thủ tục/ hàm với tham số truyền vào là tên A, thủ tục/hàm dùng để lấy ra danh sách
 --các cầu thủ có tên tương tự với tên A truyền vào này.
 CREATE proc sp_CauThu_HienThi_SameNameA(@A nvarchar(50))
@@ -83,7 +89,7 @@ select * from dbo.fc_TranDau_ThongKe_TrongTaiDieuKhienMayTran()
 --e. Tạo thủ tục/hàm với tham số truyền vào là ngay1(dd/mm/yyyy) và
 --ngay2(dd/mm/yyyy), thủ tục/hàm dùng để thống kê số trận đấu của các đội bóng (làm
 --chủ nhà) đã thi đấu trong các ngày từ ngay1 đến ngay2.
-alter proc sp_TranDau_ThongKe_TuAdenBDoiNhaDaMayTran(@A datetime,@B datetime)
+create proc sp_TranDau_ThongKe_TuAdenBDoiNhaDaMayTran(@A datetime,@B datetime)
 	
 as
 	begin
@@ -93,7 +99,7 @@ as
 		group by TranDau.MaDB1,TenDB
 	end
 sp_TranDau_ThongKe_TuAdenBDoiNhaDaMayTran '10-1-2023','10-4-2023'
-
+select * from TranDau
 create function fc_TranDau_ThongKe_TuAdenBDoiNhaDaMayTran(@A datetime,@B datetime)
 returns table
 as
@@ -294,20 +300,34 @@ select * from fc_TranDau_ThongKeMoiThangTrongNamCoBaoNhieuTran(2023)
 alter proc sp_CreateTable_CauThu_BanThang
 as
 	begin
-		declare @CauThu_BanThang table (MaCT varchar(20),TenCT nvarchar(50),SoTrai int)
+		create table CauThu_BanThang (MaCT varchar(20),TenCT nvarchar(50),SoTrai int)
 		
-		insert into @CauThu_BanThang
+		insert into CauThu_BanThang
 		select *
 		from fc_CauThuAndThamGia_TongBanCuaMoiCauThu()
-
-		select * from @CauThu_BanThang
 	end
 sp_CreateTable_CauThu_BanThang
-
 
 --p. Viết một trigger, trigger này dùng để cập nhật tổng bàn thắng của cầu thủ ở bảng
 --CauThu_BanThang mỗi khi có cập nhật hoặc thêm mới số bàn thắng của cầu thủ ở
 --bảng ThamGia.
+alter trigger trigger_Insert_ThamGia_Update_CauThuBanThang
+on ThamGia
+for insert
+as
+	begin
+		update CauThu_BanThang
+		set CauThu_BanThang.SoTrai += inserted.SoTrai
+		from ThamGia join inserted on ThamGia.MaCT = inserted.MaCT
+		where CauThu_BanThang.MaCT = inserted.MaCT
+	end 
+
+insert into ThamGia
+values ('TD04','CT01',3)
+
+select * from CauThu_BanThang
+select * from ThamGia
+
 
 backup database QLDB to disk = 'C:\Users\Administrator\Desktop\HTC\SQL\Backup and Scrip\QLDB'
 create trigger 
@@ -317,13 +337,3 @@ select * from ThamGia
 select * from TranDau
 
 
-
-
-INSERT INTO ThamGia (MaTD, MaCT, SoTrai)
-VALUES
-
-
-SELECT 
-    OBJECT_NAME(object_id) AS ObjectName, 
-    definition AS Code
-FROM sys.sql_modules;
